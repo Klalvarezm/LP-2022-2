@@ -56,7 +56,7 @@ def Classify(buffer,fila,columna):
         if buffer in palClaves:
             listaTokens.append(["pal_clave",buffer,fila,currCol])
         else:
-            listaTokens.append(["identifier",buffer,fila,currCol])
+            listaTokens.append(["id",buffer,fila,currCol])
     elif buffer[0]=="\"" and buffer[-1]=="\""  and len(buffer)>1 and buffer[-2]!="\\":
         if len(buffer)>2:
             if(buffer[-2]!="\\"):
@@ -235,30 +235,37 @@ def Tokenize(linea,fila,columna):
             return True
 
 
+def isDeclaration(listaTokens,tokenIndex):
+    jumper=tokenIndex
+    if(listaTokens[jumper][1]=="integer" or listaTokens[jumper][1]=="float"):
+        jumper+=1
+        if(listaTokens[jumper][0]=="id"):
+            jumper+=1
+            return True,jumper
+        else:
+            return False,0
+    else:
+        return False,0
+
+#0 Tipo
+#1 Value
+#2 Fila
+#3 Columna
 def parserize(listaTokens):
     #Multiples Universos
     flag=True
     tokenIndex=0
-    
+    offset=0
+    question=False
     while flag and tokenIndex<len(listaTokens):
-        currToken=listaTokens[tokenIndex]
-        #Declare Universe
-        if(currToken[1] =="integer" or currToken[1] =="float"):
-            #Declare int
-            if(currToken[1] =="integer"):
-                tokenIndex+=1        
-                currToken=listaTokens[tokenIndex]
-                if(currToken[0]=="identifier"):
-                    tokenIndex+=1        
-                    currToken=listaTokens[tokenIndex]
-                else:
-                    if(listaTokens[tokenIndex-1][1]=="returns"):
-                        tokenIndex+=1        
-                        currToken=listaTokens[tokenIndex]
-                    else:
-                         print("<",currToken[2],":",currToken[3],"> Error sintactico: se encontro: ",' "',currToken[1],'"; ',"se esperaba: ",'"',"id",'".',sep="")
-                         quit()
-        tokenIndex+=1
+        #Detect declaration
+        question,offset=isDeclaration(listaTokens,tokenIndex)
+        if(question):
+            print("Offset:",offset)
+            tokenIndex=offset
+        else:
+            print("not declaration",listaTokens[tokenIndex])
+            tokenIndex+=1
     print("El analisis sintactico ha finalizado exitosamente.")
     return 1
 
