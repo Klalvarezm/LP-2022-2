@@ -12,7 +12,7 @@ statement: (functioncreation)+ maincreation | bodyblock;
 //por dentro (cualquier statement que no declare funcion o main)
 bodyblock: ((vardeclaration)+
      | (inputstatement)+ |(arraydeclaration)+
-     |(printstatement)+|(asignationstatement)+|(conditional)+)+  ;
+     |(printstatement)+|(asignationstatement)+|(conditional)+|(forstatement)+|(whilestatement))+  ;
 /*[type] array([size]) [identifier]*/
 arraydeclaration: datatypedeclaration 'array' PIZQ (INTEGER|'?') PDER ID;
 //entrada
@@ -31,6 +31,12 @@ vardeclaration: datatypedeclaration ID;
 
 //tipos de datos para variables
 datatypedeclaration: 'integer' | 'float';
+
+//for
+forstatement: 'for' asignationstatement ';' logicexpr ';' asignationstatement bodyblock;
+
+//while
+whilestatement: 'while' logicexpr bodyblock;
 
 //Impresion
 printstatement:'Put' (ID|STRING|INTEGER|FLOAT|mathexpr) 'to' 'output';
@@ -58,6 +64,8 @@ mathexpr: (SUMOP)?
    | 'AbsoluteValue' PIZQ mathexpr PDER
    ;
 
+
+
 //identificador
 ID: [a-zA-Z]+[a-zA-Z0-9_]*;
 PIZQ   : '(' ;
@@ -71,4 +79,5 @@ LOGICNOT: ('not ');
 LINE_COMMENT   : '//' ~[\r\n]* -> skip ;
 INTEGER:[0-9]+;
 FLOAT:  [0-9]+(  [.][0-9]+);
+STRING   : '"' ~  '"' ;
 WS :  [ \t\r\n ]+ -> skip ;
