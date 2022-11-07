@@ -1,0 +1,7 @@
+integer i
+i = 0
+integer j
+j = 0
+while i < 10
+ i=i+3
+

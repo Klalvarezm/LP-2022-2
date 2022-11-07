@@ -1,4 +1,4 @@
-grammar MyGrammar;
+grammar interpreter;
 
 //Un programa es un bloque de codigo seguido del end of file
 //Un bloque es un statement donde cada statement se sigue de una linea nueva
@@ -33,10 +33,10 @@ vardeclaration: datatypedeclaration ID;
 datatypedeclaration: 'integer' | 'float';
 
 //for
-forstatement: 'for' asignationstatement ';' logicexpr ';' asignationstatement bodyblock;
+forstatement: 'for ' asignationstatement ';' logicexpr ';' asignationstatement bodyblock;
 
 //while
-whilestatement: 'while' logicexpr bodyblock;
+whilestatement: 'while ' logicexpr bodyblock;
 
 //Impresion
 printstatement:'Put' (ID|STRING|INTEGER|FLOAT|mathexpr) 'to' 'output';
@@ -58,7 +58,6 @@ mathexpr: (SUMOP)?
    |  PIZQ mathexpr PDER
    |  ID
    | INTEGER
-   | FLOAT
    |'SquareRoot' PIZQ mathexpr PDER
    |'RaiseToPower' PIZQ mathexpr','mathexpr PDER
    | 'AbsoluteValue' PIZQ mathexpr PDER
