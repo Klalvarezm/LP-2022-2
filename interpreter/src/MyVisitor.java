@@ -6,7 +6,6 @@ public class MyVisitor<T> extends interpreterBaseVisitor<T>{
 
     @Override public T visitForstatement(interpreterParser.ForstatementContext ctx){
         visitAsignationstatement(ctx.asignationstatement(0));
-        visitAsignationstatement(ctx.asignationstatement(1));
         boolean march =  Boolean.valueOf(visitLogicexpr(ctx.logicexpr()).toString());
         while (march) {
             visitBodyblock(ctx.bodyblock());
@@ -143,7 +142,7 @@ public class MyVisitor<T> extends interpreterBaseVisitor<T>{
             Object ans = 0;
 //            System.out.println(num1);
 //            System.out.println(num2);
-              
+
             switch (op) {
                 case "+":
                     ans = Integer.parseInt(num1.toString()) + Integer.parseInt(num2.toString());
