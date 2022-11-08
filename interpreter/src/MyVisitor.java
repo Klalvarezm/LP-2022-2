@@ -4,6 +4,58 @@ import java.util.*;
 public class MyVisitor<T> extends interpreterBaseVisitor<T>{
     HashMap<String, Object> table = new HashMap<>();
 
+    @Override public T visitReturndt(interpreterParser.ReturndtContext ctx)
+    {
+        if(ctx.datatypedeclaration()!=null){
+            visitDatatypedeclaration(ctx.datatypedeclaration());
+        }
+        return null;
+    }
+    @Override public T visitParams(interpreterParser.ParamsContext ctx)
+    {
+        if(ctx.datatypedeclaration()!=null){
+            visitDatatypedeclaration(ctx.datatypedeclaration(0));
+        }
+        return null;
+    }
+
+    @Override public T visitFunctioncreation(interpreterParser.FunctioncreationContext ctx)
+    {
+       if(ctx.params()!=null){
+           visitParams(ctx.params());
+       }
+       else if (ctx.returndt()!=null){
+           visitReturndt(ctx.returndt());
+       }
+       else if (ctx.bodyblock()!=null){
+           visitBodyblock(ctx.bodyblock());
+       }
+       return null;
+    }
+
+
+    @Override public T visitMaincreation(interpreterParser.MaincreationContext ctx)
+    {
+        if(ctx.returndt()!=null){
+            visitReturndt(ctx.returndt());
+        }
+        else if (ctx.bodyblock()!=null){
+            visitBodyblock(ctx.bodyblock());
+        }
+        return null;
+    }
+
+
+    @Override public T visitStatement(interpreterParser.StatementContext ctx)
+    {
+        if (ctx.functioncreation() !=null){
+            visitFunctioncreation(ctx.functioncreation(0));
+        }
+        else if (ctx.maincreation() != null){
+            visitMaincreation(ctx.maincreation());
+    }
+        return null;
+    }
     @Override public T visitForstatement(interpreterParser.ForstatementContext ctx){
         visitAsignationstatement(ctx.asignationstatement(0));
         boolean march =  Boolean.valueOf(visitLogicexpr(ctx.logicexpr()).toString());

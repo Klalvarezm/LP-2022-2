@@ -17,29 +17,29 @@ bodyblock: ((vardeclaration)+
 arraydeclaration: datatypedeclaration 'array' PIZQ (INTEGER|'?') PDER ID;
 //entrada
 //Delaracion de funciones
-functioncreation:'Function' ID '(' params ')' 'returns' returndt bodyblock;
+functioncreation:'Function ' ID '(' params ')' 'returns ' returndt bodyblock;
 
-maincreation:'Function' 'Main' '(' ')'  'returns' returndt (ID)? bodyblock;
+maincreation:'Function ' 'Main' '(' ')'  'returns ' returndt (ID)? bodyblock;
 //parametros funcion
 params: datatypedeclaration ID (','datatypedeclaration ID)*;
 
 //tipos de datos que devuelve una funcion
-returndt: datatypedeclaration | 'nothing';
+returndt: datatypedeclaration ID? | 'nothing';
 
 //declaracion de variables
 vardeclaration: datatypedeclaration ID;
 
 //tipos de datos para variables
-datatypedeclaration: 'integer' | 'float';
+datatypedeclaration: 'integer ' | 'float ';
 
 //for
 forstatement: 'for ' asignationstatement ';' logicexpr ';' asignationstatement bodyblock;
 
 //while
-whilestatement: 'while' logicexpr bodyblock;
+whilestatement: 'while ' logicexpr bodyblock;
 
 //Impresion
-printstatement:'Put' (ID|STRING|INTEGER|FLOAT|mathexpr) 'to' 'output';
+printstatement:'Put ' (ID|STRING|INTEGER|FLOAT|mathexpr) ' to ' 'output';
 //Asignacion
 asignationstatement: ID '=' mathexpr ;
 
@@ -77,5 +77,5 @@ LOGICNOT: ('not ');
 LINE_COMMENT   : '//' ~[\r\n]* -> skip ;
 INTEGER:[-]?[0-9]+;
 FLOAT:  [-]?[0-9]+(  [.][0-9]+);
-STRING   : '"' ~  '"' ;
+STRING   : '"'[ a-zA-Z0-9_ ]*'"';
 WS :  [ \t\r\n ]+ -> skip ;
