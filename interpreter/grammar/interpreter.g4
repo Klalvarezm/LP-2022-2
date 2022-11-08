@@ -36,7 +36,7 @@ datatypedeclaration: 'integer' | 'float';
 forstatement: 'for ' asignationstatement ';' logicexpr ';' asignationstatement bodyblock;
 
 //while
-whilestatement: 'while ' logicexpr bodyblock;
+whilestatement: 'while' logicexpr bodyblock;
 
 //Impresion
 printstatement:'Put' (ID|STRING|INTEGER|FLOAT|mathexpr) 'to' 'output';
@@ -44,15 +44,14 @@ printstatement:'Put' (ID|STRING|INTEGER|FLOAT|mathexpr) 'to' 'output';
 asignationstatement: ID '=' mathexpr ;
 
 //IF
-conditional : 'if' logicexpr bodyblock ('elseif' logicexpr bodyblock)* 'else' bodyblock;
+conditional : 'if' logicexpr bodyblock ('elseif' logicexpr bodyblock)* ('else' bodyblock)*;
 //entrada
 inputstatement: ID '=' 'Get' 'next' 'input';
 //Desicion expression
 logicexpr:(LOGICNOT)? mathexpr ROP mathexpr (LOGIC (LOGICNOT)? logicexpr)*;
 
 //expression test
-mathexpr: (SUMOP)?
-   | mathexpr MULOP mathexpr
+mathexpr: mathexpr MULOP mathexpr
    |  mathexpr SUMOP mathexpr
    |  FLOAT
    |  PIZQ mathexpr PDER
@@ -76,7 +75,7 @@ SUMOP  : ('+' | '-') ;
 LOGIC: ( ' and ' | ' or ' );
 LOGICNOT: ('not ');
 LINE_COMMENT   : '//' ~[\r\n]* -> skip ;
-INTEGER:[0-9]+;
-FLOAT:  [0-9]+(  [.][0-9]+);
+INTEGER:[-]?[0-9]+;
+FLOAT:  [-]?[0-9]+(  [.][0-9]+);
 STRING   : '"' ~  '"' ;
 WS :  [ \t\r\n ]+ -> skip ;

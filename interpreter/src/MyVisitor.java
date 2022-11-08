@@ -11,10 +11,9 @@ public class MyVisitor<T> extends interpreterBaseVisitor<T>{
             visitBodyblock(ctx.bodyblock());
             visitAsignationstatement(ctx.asignationstatement(1));
             march=Boolean.valueOf(visitLogicexpr(ctx.logicexpr()).toString());
-            visitAsignationstatement(ctx.asignationstatement(1));
-            System.out.println("Marchando:"+ " "+ ctx.asignationstatement(1).ID());
+            System.out.println("Marchando:"+ " "+ table.get(ctx.asignationstatement(0).ID().getText()));
         }
-        System.out.println("TEST"+ctx);
+
         return null;
     }
 
@@ -36,7 +35,6 @@ public class MyVisitor<T> extends interpreterBaseVisitor<T>{
     public T visitBodyblock(interpreterParser.BodyblockContext ctx) {
 
         if (ctx.vardeclaration() != null) {
-//            visitVardeclaration(ctx.vardeclaration(0));
             for (interpreterParser.VardeclarationContext declar:ctx.vardeclaration()) {
                 visitVardeclaration(declar);
             }
@@ -61,6 +59,7 @@ public class MyVisitor<T> extends interpreterBaseVisitor<T>{
             visitWhilestatement(ctx.whilestatement(0));
         }
         else {
+            System.out.println("-----------------------");
             return visitChildren(ctx);
         }
         return super.visitBodyblock(ctx);
@@ -182,6 +181,7 @@ public class MyVisitor<T> extends interpreterBaseVisitor<T>{
         }
 
         else{
+
             variable_value = get_values_string(ctx.mathexpr().getText());
             ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
             ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("JavaScript");
@@ -195,6 +195,7 @@ public class MyVisitor<T> extends interpreterBaseVisitor<T>{
                 throw new RuntimeException(e);
             }
             table.put(ctx.ID().toString(),ob);
+            System.out.println(ctx.getChildCount());
             System.out.println(ctx.ID().toString()+ " "+ob);
         }
 
@@ -205,7 +206,6 @@ public class MyVisitor<T> extends interpreterBaseVisitor<T>{
     public T visitVardeclaration(interpreterParser.VardeclarationContext ctx) {
         String varType = visitDatatypedeclaration(ctx.datatypedeclaration()).toString();
         table.put(ctx.ID().getText(), 1.0);
-        System.out.println(ctx.ID().getText());
         return null;
     }
 
@@ -224,56 +224,55 @@ public class MyVisitor<T> extends interpreterBaseVisitor<T>{
         int start = 0, end=-1;
 
         for (int i = 0; i < input.length(); i++) {
-           value = input.charAt(i);
-           //System.out.println(i);
-           if(String.valueOf(value).matches("[a-zA-Z]")){
-               start = i;
-               while(!operator.contains(value) && i<input.length()-1 ){
-                   i++;
-                   value = input.charAt(i);
-                   //System.out.println(i + " "+ value);
-                   //System.out.println(!operator.contains(value));
-               }
-               end=i--;
-               //System.out.println("ahora si"+input.substring(end,end+1));
-               if (operator.contains(input.charAt(end))){
-                   end--;
-               }
-               //System.out.println("asd"+i);
-               //System.out.println(start);
-               //System.out.println("imta " + input.substring(start,end));
-               //System.out.println("imta " + input.substring(start,end+1));
-               //System.out.println("valo"+String.valueOf(table.get(input.substring(start,end+1))));
-               if (String.valueOf(table.get(input.substring(start,end+1))) != null){
-                   variable_value = String.valueOf(table.get(input.substring(start,end+1)));
+            value = input.charAt(i);
+            //System.out.println(i);
+            if(String.valueOf(value).matches("[a-zA-Z]")){
+                start = i;
+                while(!operator.contains(value) && i<input.length()-1 ){
+                    i++;
+                    value = input.charAt(i);
+                    //System.out.println(i + " "+ value);
+                    //System.out.println(!operator.contains(value));
+                }
+                end=i--;
+                //System.out.println("ahora si"+input.substring(end,end+1));
+                if (operator.contains(input.charAt(end))){
+                    end--;
+                }
+                //System.out.println("asd"+i);
+                //System.out.println(start);
+                //System.out.println("imta " + input.substring(start,end));
+                //System.out.println("imta " + input.substring(start,end+1));
+                //System.out.println("valo"+String.valueOf(table.get(input.substring(start,end+1))));
+                if (String.valueOf(table.get(input.substring(start,end+1))) != null){
+                    variable_value = String.valueOf(table.get(input.substring(start,end+1)));
 
-                   if (start!=0){
-                       //System.out.println("RARO");
-                       aux = aux + variable_value;
-                       //System.out.println(aux);
-                       start = i+1  ;
-                       i = end;
-                   }
-                   else{
-                       aux = aux + variable_value;
-                       //System.out.println(aux);
-                       start = i+1;
-                       i = end;
-                   }
-               }
-               else{
-                   //System.out.println("ffff");
-               }
+                    if (start!=0){
+                        //System.out.println("RARO");
+                        aux = aux + variable_value;
+                        //System.out.println(aux);
+                        start = i+1  ;
+                        i = end;
+                    }
+                    else{
+                        aux = aux + variable_value;
+                        //System.out.println(aux);
+                        start = i+1;
+                        i = end;
+                    }
+                }
+                else{
+                    //System.out.println("ffff");
+                }
             }
-           else{
-               //System.out.println("gha");
-               aux = aux + input.substring(i,i+1);
+            else{
+                //System.out.println("gha");
+                aux = aux + input.substring(i,i+1);
 //               start++;
-           }
+            }
         }
         //System.out.println(aux);
         //System.out.println("------");
         return aux;
     }
 }
-
