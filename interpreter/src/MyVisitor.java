@@ -49,7 +49,13 @@ public class MyVisitor<T> extends interpreterBaseVisitor<T>{
     @Override public T visitStatement(interpreterParser.StatementContext ctx)
     {
         if (ctx.functioncreation() !=null){
-            visitFunctioncreation(ctx.functioncreation(0));
+            /* for (interpreterParser.ForstatementContext forcall:ctx.forstatement()) {
+                visitForstatement(forcall);
+            }*/
+            for(interpreterParser.FunctioncreationContext funccreation:ctx.functioncreation()){
+                visitFunctioncreation(funccreation);
+            }
+
         }
         else if (ctx.maincreation() != null){
             visitMaincreation(ctx.maincreation());
