@@ -6,7 +6,7 @@ grammar interpreter;
 codeblock: statement |EOF;
 
 //lista de statements
-statement: (functioncreation)+ 'Function ' maincreation | bodyblock;
+statement: (functioncreation)+ maincreation | bodyblock;
 
 //Deben haber bloques por fuera de funciones (cualquier statement)
 //por dentro (cualquier statement que no declare funcion o main)
@@ -19,7 +19,7 @@ arraydeclaration: datatypedeclaration 'array' PIZQ (INTEGER|'?') PDER ID;
 //Delaracion de funciones
 functioncreation:'Function ' ID '(' params ')' 'returns ' returndt bodyblock;
 
-maincreation:'Main' '(' ')'  'returns ' returndt (ID)? bodyblock;
+maincreation:'Function ' 'Main' '(' ')'  'returns ' returndt (ID)? bodyblock;
 //parametros funcion
 params: datatypedeclaration ID (','datatypedeclaration ID)*;
 
